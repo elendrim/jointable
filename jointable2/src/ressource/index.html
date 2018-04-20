@@ -24,6 +24,59 @@
 		    background: green;
 		    height: 50px;
 		}
+		
+		
+		/* Center the loader */
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-left: 16px solid pink;
+}
+
+
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
 		     
      	
 				  
@@ -34,6 +87,7 @@
       // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
       var map;
+      var markers = [];
       var infowindow;
 
       function initMap() {
@@ -56,12 +110,7 @@
 
             map.setCenter(pos);
             
-             var service = new google.maps.places.PlacesService(map);
-            service.nearbySearch({
-              location: pos,
-              radius: 5000,
-              type: ['restaurant']
-            }, callback);
+            placeServiceSearch();
             
           }, function() {
             handleLocationError(true, infowindow, map.getCenter());
@@ -70,22 +119,85 @@
           // Browser doesn't support Geolocation
           handleLocationError(false, infowindow, map.getCenter());
         }
+        
+        
+        map.addListener('idle', function() {
+        	placeServiceSearch();
+        });
+
       
         
         
         
       }
+      
+      function placeServiceSearch() {
+    	  // 3 seconds after the center of the map has changed, pan back to the
+          // marker.
+          var loc = map.getCenter();
+          
+          
+          $("#loader").show();
+          
+          window.setTimeout(function() {
+          	
+          	 var service = new google.maps.places.PlacesService(map);
+               service.nearbySearch({
+                 location: loc,
+                 radius: 5000,
+                 type: ['restaurant']
+               }, callback);
+               
+          }, 1000);
+      }
 
       function callback(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
+        	
+        	
+          // markers
+          deleteMarkers();
           for (var i = 0; i < results.length; i++) {
         	  if ( i == 0 ) {
             	createMarkerTable(results[i]);
           	  } else {
           		createMarker(results[i]);
-          	  }
+          	  }  
           }
+          
+          
+          // elements
+          $('#bd-docs-nav').empty();
+          for (var i = 0; i < results.length; i++) {
+        	var place = results[i];
+        	var photos = place.photos;
+        	var photoElt = '';
+        	if ( photos ) {
+        		photoElt = '      src="'+ photos[0].getUrl({'maxWidth': 64, 'maxHeight': 64}) +'"';
+        	} else {
+        		photoElt = '      src="'+ place.icon +'" width="64" height="64" ';
+        	}
+        	
+        	var contentString = '<div class="bd-toc-item" id='+ place.place_id +'>'+
+        	'<div class="media">'+
+        	'  <img class="mr-3" '+ photoElt +' alt="Generic placeholder image">'+
+        	'  <div class=""media-body">'+
+        	'     <h5 class="mt-0">'+ place.name +'</h5>'+
+        	'     <p>price_level :'+ place.price_level  +'</p>'+
+            '     <p>rating :'+ place.rating  +'</p>'+
+            '  </div>';
+            '</div>';
+        	
+          	$('#bd-docs-nav').append(contentString);
+          	
+          	
+          	
+          }
+          
+          
         }
+        
+        $("#loader").hide();
       }
 
       function createMarkerTable(place) {
@@ -107,6 +219,8 @@
           label: "1",
           zIndex: 100
         });
+        
+        markers.push(marker);
 
         google.maps.event.addListener(marker, 'click', function() {
         	var contentString = '<div>'+
@@ -140,6 +254,8 @@
             position: place.geometry.location,
             zIndex: 50
           });
+          
+          markers.push(marker);
 
           google.maps.event.addListener(marker, 'click', function() {
         	  
@@ -162,12 +278,37 @@
                             'Error: The Geolocation service failed.' :
                             'Error: Your browser doesn\'t support geolocation.');
     }
+    
+    
+ 	// Sets the map on all markers in the array.
+    function setMapOnAll(map) {
+      for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+      }
+    }
+
+    // Removes the markers from the map, but keeps them in the array.
+    function clearMarkers() {
+      setMapOnAll(null);
+    }
+
+    // Shows any markers currently in the array.
+    function showMarkers() {
+      setMapOnAll(map);
+    }
+
+    // Deletes all markers in the array by removing references to them.
+    function deleteMarkers() {
+      clearMarkers();
+      markers = [];
+    }
+    
     </script>
   </head>
   <body>
   	<header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
   		 <a class="navbar-brand mr-0 mr-md-2" href="/" aria-label="Join table">
-  	 		<img    src="table.png" 
+  	 		<img    src="table.svg" 
     		height="87px"
     		width="100px" />
     	</a>
@@ -179,6 +320,9 @@
 		    </ul>
 		</div>
   	</header>
+  	
+  	<div id="loader" ></div>
+  	
   	<div class="container-fluid">
    		
    		<div class="row flex-xl-nowrap">
