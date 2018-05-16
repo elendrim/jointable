@@ -4,7 +4,7 @@
     <title>Place searches</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link href="https://getbootstrap.com/assets/css/docs.min.css" rel="stylesheet">
+    <link href="docs.min.css" rel="stylesheet">
     
     <meta charset="utf-8">
     <style>
@@ -81,7 +81,61 @@
      	
 				  
     </style>
-    <script>
+  </head>
+  <body>
+  	<header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
+  		 <a class="navbar-brand mr-0 mr-md-2" href="/" aria-label="Join table">
+  	 		<img    src="table.svg" 
+    		height="87px"
+    		width="100px" />
+    	</a>
+  		 <div class="navbar-nav-scroll">
+   			<ul class="navbar-nav bd-navbar-nav flex-row">
+      			<li class="nav-item">
+	        		<a class="nav-link " href="/" >Home</a>
+      			</li>
+		    </ul>
+		</div>
+  	</header>
+  	
+  	<div id="loader" ></div>
+  	
+  	<div class="container-fluid">
+   		
+   		<div class="row flex-xl-nowrap">
+        	<div class="col-12 col-md-3 col-xl-2 bd-sidebar">
+        	
+        	<form class="bd-search d-flex align-items-center">
+				  <input type="search" class="form-control" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+				  <button class="btn btn-link bd-search-docs-toggle d-md-none p-0 ml-3" type="button" data-toggle="collapse" data-target="#bd-docs-nav" aria-controls="bd-docs-nav" aria-expanded="false" aria-label="Toggle docs navigation"><svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 30 30" width="30" height="30" focusable="false"><title>Menu</title><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"/></svg>
+				</button>
+				</form>
+        	
+        		<nav class="collapse bd-links" id="bd-docs-nav">
+        			
+  				 
+  				</nav>
+    		</div>
+    		<main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content" role="main">
+	  		 		<div id="map" ></div>
+	  		 </main>
+    	</div>		
+  		
+	</div>
+	
+	
+    
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBCLERi9KU1kVXH3QkN_02WhsDBefQbyc&libraries=places" async defer></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script>
+	
+	$(function() {
+		initMap();
+	});
+	
       // This example requires the Places library. Include the libraries=places
       // parameter when you first load the API. For example:
       // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
@@ -148,7 +202,7 @@
                  type: ['restaurant']
                }, callback);
                
-          }, 1000);
+          }, 100);
       }
 
       function callback(results, status) {
@@ -304,100 +358,6 @@
     }
     
     </script>
-  </head>
-  <body>
-  	<header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
-  		 <a class="navbar-brand mr-0 mr-md-2" href="/" aria-label="Join table">
-  	 		<img    src="table.svg" 
-    		height="87px"
-    		width="100px" />
-    	</a>
-  		 <div class="navbar-nav-scroll">
-   			<ul class="navbar-nav bd-navbar-nav flex-row">
-      			<li class="nav-item">
-	        		<a class="nav-link " href="/" >Home</a>
-      			</li>
-		    </ul>
-		</div>
-  	</header>
-  	
-  	<div id="loader" ></div>
-  	
-  	<div class="container-fluid">
-   		
-   		<div class="row flex-xl-nowrap">
-        	<div class="col-12 col-md-3 col-xl-2 bd-sidebar">
-        	
-        	<form class="bd-search d-flex align-items-center">
-				  <input type="search" class="form-control" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
-				  <button class="btn btn-link bd-search-docs-toggle d-md-none p-0 ml-3" type="button" data-toggle="collapse" data-target="#bd-docs-nav" aria-controls="bd-docs-nav" aria-expanded="false" aria-label="Toggle docs navigation"><svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 30 30" width="30" height="30" focusable="false"><title>Menu</title><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"/></svg>
-				</button>
-				</form>
-        	
-        		<nav class="collapse bd-links" id="bd-docs-nav">
-        			<div class="bd-toc-item">
-  				 		<p>Left content</p>
-  				 	</div>
-  				 	<div class="bd-toc-item">
-  				 		<p>Left content</p>
-  				 	</div>
-  				 	<div class="bd-toc-item">
-  				 		<p>Left content</p>
-  				 	</div>
-  				 	<div class="bd-toc-item">
-  				 		<p>Left content</p>
-  				 	</div>
-  				 	<div class="bd-toc-item">
-  				 		<p>Left content</p>
-  				 	</div>
-  				 	<div class="bd-toc-item">
-  				 		<p>Left content</p>
-  				 	</div>
-  				 	<div class="bd-toc-item">
-  				 		<p>Left content</p>
-  				 	</div>
-  				 	<div class="bd-toc-item">
-  				 		<p>Left content</p>
-  				 	</div>
-  				 	<div class="bd-toc-item">
-  				 		<p>Left content</p>
-  				 	</div>
-  				 	<div class="bd-toc-item">
-  				 		<p>Left content</p>
-  				 	</div>
-  				 	<div class="bd-toc-item">
-  				 		<p>Left content</p>
-  				 	</div>
-  				 	<div class="bd-toc-item">
-  				 		<p>Left content</p>
-  				 	</div>
-  				 	<div class="bd-toc-item">
-  				 		<p>Left content</p>
-  				 	</div>
-  				 	<div class="bd-toc-item">
-  				 		<p>Left content</p>
-  				 	</div>
-  				 	<div class="bd-toc-item">
-  				 		<p>Left content</p>
-  				 	</div>
-  				 
-  				</nav>
-    		</div>
-    		<main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content" role="main">
-	  		 		<div id="map" ></div>
-	  		 </main>
-    	</div>		
-  		
-	</div>
-	
-	
-    
-    
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBCLERi9KU1kVXH3QkN_02WhsDBefQbyc&libraries=places&callback=initMap" async defer></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
     
     
   </body>
